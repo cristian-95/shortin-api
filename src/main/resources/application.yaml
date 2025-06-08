@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: Shortin-api
+
+generator:
+  length: 5
