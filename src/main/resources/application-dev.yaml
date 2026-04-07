@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: Shortin-api
+  jpa:
+    hibernate:
+      ddl-auto: validate
+      database: postgres
+      show-sql: true
+  datasource:
+    url: jdbc:postgresql://localhost:5432/shortin_db
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+api:
+  base-url: ${BASE_URL}
+encoder:
+  length: ${ENCODER_LENGTH}
+  alphabet: ${ENCODER_ALPHABET}
+  algorithm: ${ENCODER_ALGORITHM}
+  base: ${ENCODER_BASE}
+
+
