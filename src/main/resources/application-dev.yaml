@@ -11,7 +11,7 @@ spring:
     username: ${DB_USER}
     password: ${DB_PASSWORD}
 api:
-  base-url: ${BASE_URL}
+  base-url: "http://localhost:8080"
 encoder:
   length: ${ENCODER_LENGTH}
   alphabet: ${ENCODER_ALPHABET}

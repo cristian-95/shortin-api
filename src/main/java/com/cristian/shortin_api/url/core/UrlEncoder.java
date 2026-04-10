@@ -28,6 +28,10 @@ public class UrlEncoder {
     }
 
     private static String encode(String input) {
+        String URL_REGEX = "^(www\\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\\.[a-z]{2,4}\\b([-a-zA-Z0-9@:%_+.~#?&/=]*)$";
+        if (!input.matches(URL_REGEX)) {
+            throw new RuntimeException("Invalid url");
+        }
         byte[] hash;
         try {
             MessageDigest messageDigest = MessageDigest.getInstance(ALGORITHM);

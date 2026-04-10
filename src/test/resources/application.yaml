@@ -3,3 +3,5 @@ spring:
     url: jdbc:tc:postgresql:latest:///shortin-test-db
     username: test_user
     password: test_password
+api:
+  base-url: "http://localhost:8080"
