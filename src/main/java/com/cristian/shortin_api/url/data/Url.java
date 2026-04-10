@@ -21,6 +21,5 @@ public class    Url {
     private String code;
     @Column(name = "long_url", nullable = false, unique = true)
     private String longUrl;
-    @Column(name = "short_url", nullable = false, unique = true)
-    private String shortUrl;
+
 }
