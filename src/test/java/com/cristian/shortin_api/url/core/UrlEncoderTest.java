@@ -1,12 +1,25 @@
 package com.cristian.shortin_api.url.core;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class UrlEncoderTest {
 
-    private UrlEncoder encoder = new UrlEncoder();
+    @InjectMocks
+    private static UrlEncoder encoder;
+
+    @BeforeAll
+    static void setUp() {
+        encoder = new UrlEncoder();
+        ReflectionTestUtils.setField(encoder, "ALGORITHM", "SHA-256");
+        ReflectionTestUtils.setField(encoder, "ALPHABET", "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz");
+        ReflectionTestUtils.setField(encoder, "BASE", 62);
+        ReflectionTestUtils.setField(encoder, "LENGTH", 6);
+    }
 
     @Test
     void getShortCode_With_Valid_Link_Returns_Valid_Code() {
