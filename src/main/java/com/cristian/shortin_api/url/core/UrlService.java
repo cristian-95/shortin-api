@@ -1,5 +1,6 @@
 package com.cristian.shortin_api.url.core;
 
+import com.cristian.shortin_api.infra.exception.UrlNotFoundException;
 import com.cristian.shortin_api.url.data.Url;
 import com.cristian.shortin_api.url.data.UrlRepository;
 import com.cristian.shortin_api.url.dto.UrlDTO;
@@ -43,24 +44,22 @@ public class UrlService {
         return new UrlDTO(url.getLongUrl(), shortUrl);
     }
 
-    public UrlDTO getUrl(String shortUrl) {
-        logger.info("Retrieving long url from: {}", shortUrl);
-        Url url = findUrl(shortUrl);
+    public UrlDTO getUrl(String code) {
+        logger.info("Retrieving long url from: {}", code);
+        Url url = findUrl(code);
         return new UrlDTO(url.getLongUrl(), baseUrl + "/" + url.getCode());
     }
 
     @Transactional
-    public void deleteUrl(String shortUrl) {
-        logger.info("Deleting url: {}", shortUrl);
-        Url url = findUrl(shortUrl);
+    public void deleteUrl(String code) {
+        logger.info("Deleting url: {}", code);
+        Url url = findUrl(code);
         this.urlRepository.delete(url);
     }
 
     private Url findUrl(String code) {
-        if (code.length() > 6 && code.contains(baseUrl)) {
-            code = code.substring(baseUrl.length() + 1);
-        }
-        String finalCode = code;
-        return urlRepository.findById(code).orElseThrow(() -> new RuntimeException("Url "+ finalCode +" not found"));
+        return urlRepository
+                .findById(code)
+                .orElseThrow(() -> new UrlNotFoundException("Url not found."));
     }
 }
