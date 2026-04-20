@@ -2,6 +2,7 @@ package com.cristian.shortin_api.url.core;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.InvalidUrlException;
 
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
@@ -12,33 +13,28 @@ import java.security.NoSuchAlgorithmException;
 public class UrlEncoder {
 
     @Value("${encoder.alphabet}")
-    private static String ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    private String ALPHABET;
 
     @Value("${encoder.base}")
-    private static int BASE = 62;
+    private int BASE;
 
     @Value("${encoder.length}")
-    private static int LENGTH = 6;
+    private int LENGTH;
 
     @Value("${encoder.algorithm}")
-    private static String ALGORITHM = "SHA-256";
+    private String ALGORITHM;
 
     public String getShortCode(String input) {
         return encode(input);
     }
 
-    private static String encode(String input) {
-        String URL_REGEX = "^(www\\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\\.[a-z]{2,4}\\b([-a-zA-Z0-9@:%_+.~#?&/=]*)$";
+    private String encode(String input) {
+        String URL_REGEX = "((ht|f)tp(s)?://)?(w{0,3}\\.)?[a-zA-Z0-9_\\-.:#/~}]+(\\.[a-zA-Z]{1,4})(/[a-zA-Z0-9_\\-.:#/~}]*)?";
         if (!input.matches(URL_REGEX)) {
-            throw new RuntimeException("Invalid url");
+            throw new InvalidUrlException("Invalid url.");
         }
-        byte[] hash;
-        try {
-            MessageDigest messageDigest = MessageDigest.getInstance(ALGORITHM);
-            hash = messageDigest.digest(input.getBytes(StandardCharsets.UTF_8));
-        } catch (NoSuchAlgorithmException exception) {
-            throw new RuntimeException("Algorithm " + ALGORITHM + " not supported");
-        }
+
+        byte[] hash = getHash(input);
 
         BigInteger hashNumber = new BigInteger(1, hash);
         BigInteger modulus = BigInteger.valueOf(BASE).pow(LENGTH);
@@ -47,7 +43,18 @@ public class UrlEncoder {
         return toBase(number);
     }
 
-    private static String toBase(BigInteger number) {
+    private byte[] getHash(String input) {
+        byte[] hash;
+        try {
+            MessageDigest messageDigest = MessageDigest.getInstance(ALGORITHM);
+            hash = messageDigest.digest(input.getBytes(StandardCharsets.UTF_8));
+        } catch (NoSuchAlgorithmException exception) {
+            throw new IllegalArgumentException("Algorithm " + ALGORITHM + " not supported");
+        }
+        return hash;
+    }
+
+    private String toBase(BigInteger number) {
         if (number.equals(BigInteger.ZERO)) {
             throw new RuntimeException(" Untreated exception");
         }
