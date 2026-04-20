@@ -8,22 +8,30 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
+
 @RestController
-@RequestMapping("/shorten")
+@RequestMapping("")
 public class UrlController {
 
     @Autowired
     private UrlService urlService;
 
-    @PostMapping
+    @PostMapping("/shorten")
     public ResponseEntity<UrlDTO> createShortUrl(@RequestBody UrlRequestDTO dto) {
         UrlDTO shortUrl = urlService.createUrl(dto.url());
         return ResponseEntity.status(HttpStatus.CREATED).body(shortUrl);
     }
 
     @GetMapping("/{code}")
-    public ResponseEntity<UrlDTO> getOriginalUrl(@PathVariable(name = "code") String code) {
+    public ResponseEntity<Object> getOriginalUrl(@PathVariable(name = "code") String code) {
         UrlDTO url = urlService.getUrl(code);
-        return ResponseEntity.ok(url);
+        return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(url.longUrl())).build();
+    }
+
+    @DeleteMapping("/{code}")
+    public ResponseEntity<Void> deleteUrl(@PathVariable(name = "code") String code) {
+        urlService.deleteUrl(code);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
