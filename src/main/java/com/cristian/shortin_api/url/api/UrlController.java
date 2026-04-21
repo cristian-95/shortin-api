@@ -3,7 +3,7 @@ package com.cristian.shortin_api.url.api;
 import com.cristian.shortin_api.url.core.UrlService;
 import com.cristian.shortin_api.url.dto.UrlDTO;
 import com.cristian.shortin_api.url.dto.UrlRequestDTO;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,11 +11,12 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 
 @RestController
-@RequestMapping("")
+@RequestMapping
+@RequiredArgsConstructor
 public class UrlController {
 
-    @Autowired
-    private UrlService urlService;
+
+    private final UrlService urlService;
 
     @PostMapping("/shorten")
     public ResponseEntity<UrlDTO> createShortUrl(@RequestBody UrlRequestDTO dto) {
