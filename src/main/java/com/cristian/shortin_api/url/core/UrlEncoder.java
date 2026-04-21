@@ -55,10 +55,6 @@ public class UrlEncoder {
     }
 
     private String toBase(BigInteger number) {
-        if (number.equals(BigInteger.ZERO)) {
-            throw new RuntimeException(" Untreated exception");
-        }
-
         StringBuilder stringBuilder = new StringBuilder();
         BigInteger num = number;
         while (num.compareTo(BigInteger.ZERO) > 0) {
