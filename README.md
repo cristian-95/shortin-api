@@ -33,7 +33,7 @@ Uma API simples para encurtar URLs.
    cd shortin-api
    ```
 
-2. **Configure as variáveis de ambiente** (crie um arquivo `.env` ou defina na IDE):
+2. **Configure as variáveis de ambiente** (renomeio o arquivo .env.example e ajuste os valores):
    ```env
    DB_USER=
    DB_PASSWORD=
@@ -43,10 +43,15 @@ Uma API simples para encurtar URLs.
    ENCODER_BASE=
    ```
 
-3. **Suba o banco de dados com Docker Compose:**
+3. **Suba os serviços com Docker Compose:**
    ```bash
-   docker-compose up -d
+   # subir todos os serviços:
+   docker-compose --profile app up -d
+   # parar e remover containers e networks
+   docker-compose --profile app down -d
    ```
+   obs: para subir apenas o banco de dados, o prometheus e o grafana utilize o profile 'infra'
+
 
 4. **Execute a aplicação:**
    ```bash
