@@ -1,21 +1,32 @@
 spring:
   application:
     name: Shortin-api
+  docker:
+    compose:
+      profiles:
+        active: infra
   jpa:
     hibernate:
       ddl-auto: validate
       database: postgres
       show-sql: true
   datasource:
-    url: jdbc:postgresql://localhost:5432/shortin_db
-    username: ${DB_USER}
-    password: ${DB_PASSWORD}
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, prometheus, metrics
+      base-path: /actuator
+
 api:
   base-url: "http://localhost:8080"
+
 encoder:
   length: ${ENCODER_LENGTH}
   alphabet: ${ENCODER_ALPHABET}
   algorithm: ${ENCODER_ALGORITHM}
   base: ${ENCODER_BASE}
-
-

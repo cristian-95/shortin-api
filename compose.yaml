@@ -1,9 +1,70 @@
 services:
+
+  shortin-api:
+    build: .
+    container_name: shortin-api
+    ports:
+      - '8080:8080'
+    environment:
+      SPRING_DATASOURCE_URL: ${DB_URL}
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME:- postgres}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:- postgres}
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILE}
+      ENCODER_LENGTH: ${API_ENCODER_LENGTH}
+      ENCODER_ALPHABET: ${API_ENCODER_ALPHABET}
+      ENCODER_ALGORITHM: ${API_ENCODER_ALGORITHM}
+      ENCODER_BASE: ${API_ENCODER_BASE}
+    depends_on:
+      - postgres
+    profiles:
+      - app
+
   postgres:
     image: 'postgres:latest'
     environment:
-      - 'POSTGRES_DB=shortin_db'
-      - 'POSTGRES_PASSWORD=${DB_PASSWORD}'
-      - 'POSTGRES_USER=${DB_USER}'
+      POSTGRES_DB: ${DB_NAME:-shortin}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      POSTGRES_USER: ${DB_USERNAME:-postgres}
     ports:
-      - '5432'
+      - '5432:5432'
+    profiles:
+      - infra
+      - app
+
+  prometheus:
+    image: prom/prometheus:v2.53.0
+    container_name: prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    ports:
+      - "9090:9090"
+    restart: unless-stopped
+    profiles:
+      - infra
+      - app
+
+  grafana:
+    image: grafana/grafana:11.0.0
+    container_name: grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana_data:/var/lib/grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+    profiles:
+      - infra
+      - app
+
+
+volumes:
+  prometheus_data:
+  grafana_data:
