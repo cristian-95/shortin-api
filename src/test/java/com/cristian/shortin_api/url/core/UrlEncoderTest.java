@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.web.util.InvalidUrlException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -44,12 +45,12 @@ class UrlEncoderTest {
 
     @Test
     void getShortCode_With_Empty_Link_Throws_Runtime_Exception() {
-        assertThrows(RuntimeException.class, () -> encoder.getShortCode(""));
+        assertThrows(InvalidUrlException.class, () -> encoder.getShortCode(""));
     }
 
     @Test
     void getShortCode_With_Invalid_Link_Throws_Runtime_Exception() {
         String INVALID_LINK = "some invalid text";
-        assertThrows(RuntimeException.class, () -> encoder.getShortCode(INVALID_LINK));
+        assertThrows(InvalidUrlException.class, () -> encoder.getShortCode(INVALID_LINK));
     }
 }

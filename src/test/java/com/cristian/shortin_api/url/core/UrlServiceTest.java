@@ -86,7 +86,7 @@ class UrlServiceTest {
         String code = "aaaaaa";
         Url url = new Url(code, link);
 
-        when(repository.findById(code)).thenThrow(RuntimeException.class);
+        when(repository.findById(code)).thenThrow(UrlNotFoundException.class);
 
         assertThrows(RuntimeException.class, () -> service.getUrl(code));
     }

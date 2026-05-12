@@ -31,7 +31,7 @@ public class UrlEncoder {
     private String encode(String input) {
         String URL_REGEX = "((ht|f)tp(s)?://)?(w{0,3}\\.)?[a-zA-Z0-9_\\-.:#/~}]+(\\.[a-zA-Z]{1,4})(/[a-zA-Z0-9_\\-.:#/~}]*)?";
         if (!input.matches(URL_REGEX)) {
-            throw new InvalidUrlException("Invalid url.");
+            throw new InvalidUrlException("Invalid URL, please check your spelling and try again.");
         }
 
         byte[] hash = getHash(input);
