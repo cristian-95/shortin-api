@@ -2,9 +2,9 @@ package com.cristian.shortin_api.url.core;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.web.util.InvalidUrlException;
 
 import java.math.BigInteger;
+import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -25,15 +25,17 @@ public class UrlEncoder {
     private String ALGORITHM;
 
     public String getShortCode(String input) {
-        return encode(input);
+        try {
+            return encode(input);
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    private String encode(String input) {
-        String URL_REGEX = "((ht|f)tp(s)?://)?(w{0,3}\\.)?[a-zA-Z0-9_\\-.:#/~}]+(\\.[a-zA-Z]{1,4})(/[a-zA-Z0-9_\\-.:#/~}]*)?";
-        if (!input.matches(URL_REGEX)) {
-            throw new InvalidUrlException("Invalid URL, please check your spelling and try again.");
+    private String encode(String input) throws MalformedURLException {
+        if (input.isBlank()) {
+            throw new MalformedURLException("Invalid URL, please check your spelling and try again.");
         }
-
         byte[] hash = getHash(input);
 
         BigInteger hashNumber = new BigInteger(1, hash);

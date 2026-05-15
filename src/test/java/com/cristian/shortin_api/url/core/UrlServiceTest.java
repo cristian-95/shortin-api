@@ -17,6 +17,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+import java.net.MalformedURLException;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -42,7 +43,7 @@ class UrlServiceTest {
     private String baseUrl;
 
     @Test
-    void create_Url_With_Valid_Link_Returns_UrlDTO() {
+    void create_Url_With_Valid_Link_Returns_UrlDTO() throws MalformedURLException {
         String link = "https://www.example.com";
         String mockCode = "4bcd3f";
 

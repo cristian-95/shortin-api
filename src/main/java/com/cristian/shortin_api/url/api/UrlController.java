@@ -3,11 +3,13 @@ package com.cristian.shortin_api.url.api;
 import com.cristian.shortin_api.url.core.UrlService;
 import com.cristian.shortin_api.url.dto.UrlDTO;
 import com.cristian.shortin_api.url.dto.UrlRequestDTO;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.MalformedURLException;
 import java.net.URI;
 
 @RestController
@@ -19,7 +21,7 @@ public class UrlController {
     private final UrlService urlService;
 
     @PostMapping("/shorten")
-    public ResponseEntity<UrlDTO> createShortUrl(@RequestBody UrlRequestDTO dto) {
+    public ResponseEntity<UrlDTO> createShortUrl(@RequestBody @Valid UrlRequestDTO dto) throws MalformedURLException {
         UrlDTO shortUrl = urlService.createUrl(dto.url());
         return ResponseEntity.status(HttpStatus.CREATED).body(shortUrl);
     }
