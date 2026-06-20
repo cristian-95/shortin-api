@@ -1,6 +1,10 @@
+server:
+  servlet:
+    context-path: "/"
+
 spring:
   application:
-    name: Shortin-api
+    name: Shortin-API
   docker:
     compose:
       profiles:
@@ -15,15 +19,20 @@ spring:
     username: ${SPRING_DATASOURCE_USERNAME}
     password: ${SPRING_DATASOURCE_PASSWORD}
 
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health, prometheus, metrics
-      base-path: /actuator
+  management:
+    endpoints:
+      web:
+        exposure:
+          include: health, prometheus, metrics
+        base-path: "/manage"
+
 
 api:
   base-url: "http://localhost:8080"
+
+logging:
+  level:
+    web: INFO
 
 encoder:
   length: ${ENCODER_LENGTH}
