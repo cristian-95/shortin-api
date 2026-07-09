@@ -1,7 +1,3 @@
-server:
-  servlet:
-    context-path: "/"
-
 spring:
   application:
     name: Shortin-API
@@ -19,13 +15,19 @@ spring:
     username: ${SPRING_DATASOURCE_USERNAME}
     password: ${SPRING_DATASOURCE_PASSWORD}
 
-  management:
-    endpoints:
-      web:
-        exposure:
-          include: health, prometheus, metrics
-        base-path: "/manage"
-
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, prometheus, info, logfile, metrics
+  endpoint:
+    prometheus:
+      metrics:
+        export:
+          enabled: true
+  metrics:
+    tags:
+      application: shortin-api-prometheus-grafana
 
 api:
   base-url: "http://localhost:8080"

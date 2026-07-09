@@ -21,6 +21,7 @@ services:
 
   postgres:
     image: 'postgres:latest'
+    container_name: 'shortin-api-postgres'
     environment:
       POSTGRES_DB: ${DB_NAME:-shortin}
       POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}

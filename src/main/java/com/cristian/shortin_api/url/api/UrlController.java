@@ -16,7 +16,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 
 @RestController
-@RequestMapping
+@RequestMapping("/api")
 @RequiredArgsConstructor
 @Tag(name = "URLs", description = "Operações relacionadas a URLs.")
 public class UrlController {
